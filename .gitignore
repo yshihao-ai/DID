@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+
+# Env
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local experiment and analysis utilities
+tools/
+
+# Training / inference artifacts
+output/
+runs/
+checkpoints/
+*.ckpt
+*.bin.tmp
+llm_config/did/training_args.bin
+
+# MIDI / audio / visualization artifacts
+*.mid
+*.midi
+*.wav
+*.mp3
+*.png
+*.zip
+
+# Optional local data roots (if present locally)
+dataset/

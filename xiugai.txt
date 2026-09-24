@@ -1,0 +1,8 @@
+1. 改了指标，空bar相似度不是1，然后强制按照4/4拍切割。
+2. 改了dataset.py和infer.py，目的是根据情况筛选 bridge 轨道。
+3. did_model 加入采样优化
+4. step1_....py 修正了对Pop909数据集的beat错位问题。
+5. encoding_utils.py 和 did_model.py 的 generate() 方法，加入了对 NOTE 事件的 beat 属性的支持，让他 follow 了 BEAT 事件。
+6. 让 Pop909 数据集读取 chord_midi.txt 获取 CHORD 标签。
+7. 每个 track 内部，pitch 从低到高排列。
+。

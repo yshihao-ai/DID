@@ -1,0 +1,31 @@
+Metadata-Version: 2.4
+Name: smg-metrics
+Version: 5.3.0
+Summary: Objective evaluation metrics for Symbolic Music Generation
+Author: Temmie Pratt
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/OlyMarco/smg_metric
+Project-URL: Repository, https://github.com/OlyMarco/smg_metric
+Project-URL: Issues, https://github.com/OlyMarco/smg_metric/issues
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Multimedia :: Sound/Audio :: MIDI
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: muspy>=0.5.0
+Requires-Dist: miditoolkit>=1.0
+Requires-Dist: pretty-midi>=0.2.10
+Requires-Dist: numpy>=1.24
+Requires-Dist: scipy>=1.10
+Requires-Dist: mir-eval>=0.7
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+Requires-Dist: tqdm>=4.66; extra == "dev"
+Provides-Extra: torch
+Requires-Dist: torch>=2.0.0; extra == "torch"

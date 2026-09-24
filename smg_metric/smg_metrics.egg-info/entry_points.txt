@@ -1,0 +1,2 @@
+[console_scripts]
+smg-eval = smg_metrics.cli:main
