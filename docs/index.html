@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="See how DID generates music in two autoregressive dimensions: latent guidance across bars, and musical events within each bar.">
+  <meta name="theme-color" content="#fafbfD">
+  <title>DID — Music in two dimensions</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23694ad9'/%3E%3Cpath d='M10 10h8v8h-8zm12 0h8v8h-8zM10 22h8v8h-8zm12 0h8v8h-8z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="DID home"><span class="brand-icon"><i></i><i></i><i></i><i></i></span>DID<span class="brand-separator"></span><span class="brand-caption" data-i18n="brand">Decoder-in-Decoder</span></a>
+    <nav aria-label="Display settings"><span class="eyebrow desktop" data-i18n="interactive">INTERACTIVE EXPLAINER</span><button id="language" class="quiet" aria-label="Switch to Chinese">中文</button><button id="fullscreen" class="icon-button" aria-label="Enter fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow" data-i18n="kicker">TWO-DIMENSIONAL AUTOREGRESSIVE MUSIC GENERATION</div><h1 data-i18n="title">Music unfolds. <em>In two dimensions.</em></h1><p class="dek" data-i18n="subtitle">Generate a bar, event by event. Only then, move to the next.</p></div>
+      <div class="axis-key"><span><b class="key-line purple"></b><strong>Time Decoder</strong><small data-i18n="across">Across bars · vertical</small></span><span><b class="key-line teal"></b><strong>Note Decoder</strong><small data-i18n="within">Within a bar · horizontal</small></span></div>
+    </section>
+
+    <section class="experience" aria-label="Synchronized decoding animation">
+      <div class="panels">
+        <section class="printer-panel">
+          <div class="panel-heading"><div><span class="eyebrow" data-i18n="analogy">THE ANALOGY</span><h2 data-i18n="printer">A musical printer</h2></div><span class="mini-tag" data-i18n="sync">IN SYNC</span></div>
+          <div id="printer-stage" class="stage"></div>
+          <p class="panel-caption" id="printer-caption"></p>
+        </section>
+        <section class="decoder-panel">
+          <div class="panel-heading"><div><span class="eyebrow" data-i18n="mechanism">THE MECHANISM</span><h2 data-i18n="decoder">Two decoders. One unfolding score.</h2></div><span class="bar-counter" id="bar-counter">BAR 01 / 04</span></div>
+          <div id="decoder-stage" class="stage"></div>
+          <p class="panel-caption" id="decoder-caption"></p>
+        </section>
+      </div>
+      <div class="narration" aria-live="polite" aria-atomic="true"><span class="phase-pill" id="phase-pill"></span><div><h3 id="narration-title"></h3><p id="narration-text"></p></div><span id="coordinate" class="coordinate"></span></div>
+      <div class="transport">
+        <div class="transport-buttons"><button id="play" class="primary" aria-label="Play animation"><span id="play-icon">▶</span><span id="play-label">Play</span></button><button id="restart" class="icon-button" aria-label="Restart" title="Restart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button><button id="step" class="icon-button" aria-label="Next step" title="Next step"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 5 10 7-10 7V5Zm12 0v14"/></svg></button></div>
+        <div class="timeline"><input id="timeline" type="range" min="0" value="0" step="1" aria-label="Animation progress"><div class="timeline-labels"><span data-i18n="start">History</span><span data-i18n="finish">Completed score</span></div></div>
+        <label class="speed"><span data-i18n="speed">Speed</span><select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+        <button id="loop" class="quiet loop" aria-pressed="false" data-i18n="loop">Loop</button>
+      </div>
+    </section>
+    <section class="takeaway"><p data-i18n="takeaway"><strong>The essential dependency:</strong> the next bar waits for the current bar to finish.</p><span data-i18n="schematic">Conceptual animation · illustrative score</span></section>
+    <details class="explanation"><summary><span data-i18n="details">What is predicted? And how does this map to the code?</span><span class="plus">+</span></summary><div class="details-content">
+      <article><h3 data-i18n="detailTitle1">The hidden state is the guidance.</h3><p data-i18n="detailBody1">At step t, the Time Decoder computes a context-dependent hidden state hₜ from available history. A learned connector maps hₜ to a sequence of four latent prefix vectors Pₜ. This prefix is injected into the Note Decoder before it autoregressively generates the events of bar t. The guidance is latent, not a set of already-generated notes.</p><div class="formula">history → hₜ → Pₜ = MLP(hₜ) → xₜ,₁ → xₜ,₂ → … → STO</div><p data-i18n="detailBody2">“Predicting guidance” means producing a learned latent representation used to predict the next bar’s events. It does not mean that the implementation has a separate supervised target or loss for future hidden states.</p></article>
+      <article><h3 data-i18n="detailTitle2">A deliberate simplification.</h3><p data-i18n="detailBody3">The main animation shows the conceptual cycle: finish bar t, summarize it, and use the feedback for the next step. The current main branch partitions history: bar t’s raw NOTE events go directly into the next bar’s Note Decoder, while its summary enters the Time Decoder one step later (when generating bar t+2). The animation omits this routing detail to keep the two autoregressive axes visible.</p><p data-i18n="detailBody4">Each row represents one bar; each horizontal step represents a musical event, not necessarily a single note. Notes here are illustrative glyphs; actual events can also describe beats, instruments and other structure. STO ends a bar. Four bars and their event counts are only a demonstration, not model limits.</p><div class="source-links"><a href="https://github.com/yshihao-ai/DID/blob/main/musicmodel/did_model.py#L1682-L1729" target="_blank" rel="noreferrer" data-i18n="source1">Hidden state & prefix in code</a><a href="https://github.com/yshihao-ai/DID/blob/main/musicmodel/did_model.py#L2174-L2187" target="_blank" rel="noreferrer" data-i18n="source2">History update in code</a></div></article>
+    </div></details>
+  </main>
+  <footer><span>DID <span class="footer-dot">/</span> <span data-i18n="footer">Decoder-in-Decoder · A visual explanation</span></span><span data-i18n="shortcuts">Space to play · → to step · R to restart</span></footer>
+</body>
+</html>
